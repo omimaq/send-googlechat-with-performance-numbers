@@ -1,10 +1,10 @@
 function getChatbotService() {
- return OAuth2.createService('client-delivery-bot')
+ return OAuth2.createService('client-delivery-bot') 
  // Set the endpoint URL.
  .setTokenUrl('https://accounts.google.com/o/oauth2/token')
 // Set the private key and issuer.
- .setPrivateKey(PRIVATE_KEY)
- .setIssuer(CLIENT_EMAIL)
+ .setPrivateKey(PRIVATE_KEY) // Here should your the key of your service account
+ .setIssuer(CLIENT_EMAIL) // Here should your the email id of your service account
 // Set the property store where authorized tokens should be persisted.
  .setPropertyStore(PropertiesService.getScriptProperties())
 // Set the scope.
@@ -31,7 +31,7 @@ function sendUserMetric() {
 
   // select the range from the Summary sheet
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName("Daily");
+  var sheet = ss.getSheetByName("Daily"); // Daily is the sheet where my message is fed
   var lastRow = sheet.getLastRow();
    
   var range = sheet.getRange(2,1,lastRow,5).getValues();
@@ -62,9 +62,7 @@ function sendUserMetric() {
           sendToSlack2(range[i]);
           break;
       }
-      
-      // add timestamp to final column to show when communication was sent
-      // sheet.getRange(2,6,1,1).setValue(timestamp); 
+    
     };
   } 
 }
@@ -90,11 +88,10 @@ function sendPushMessage(users) {
         var space = rep.spaces[i];
         if(space.type == "ROOM"){
           //We send message only to Direct Message room.
-          //var url = 'https://chat.googleapis.com/v1/'+space.name+'/messages';
           var url = 'https://chat.googleapis.com/v1/'+space.name+'/messages';
           
           
-          
+          // we pull the entire message from the range specified in Daily sheets and send as a payload
           var payload = { "text": users[1] }
                     
                  
